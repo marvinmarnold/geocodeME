@@ -1,9 +1,47 @@
+var count
+var rateLimit
+Meteor.startup(function(){
+  count = 0
+  rateLimit = 600 //per minute
+  reset()
+});
+
+var reset = function() {
+  count = 0
+  processQ()
+  Meteor.setTimeout(function () {
+    reset()
+  }, 1 * 60 * 1000);
+}
+
+var processQ = function() {
+  if(q.find().count() > 0) {
+    count++
+    if(count <= rateLimit) {
+      var element = q.findOne()
+      q.remove(element._id)
+      console.log(element);
+      console.log('from q: ' + element.docId + " " + element.address);
+      getGeocode(element.docId, element.address, element.lat, element.long)
+      processQ()
+    }
+  }
+}
+
 Meteor.methods({
-  getGeocode:function(docId, address) {
+  getGeocode:function(docId, address, lat, long) {
     check(address, String)
     check(docId, String)
+    check(lat, Number)
+    check(long, Number)
 
-    getGeocode(docId, address)
+    count++
+
+    if(count <= rateLimit) {
+      getGeocode(docId, address, lat, long)
+    } else {
+      q.insert({docId: docId, address: address, lat: lat, long: long})
+    }
 
     return docId
   },
@@ -27,7 +65,7 @@ Meteor.methods({
   }
 });
 
-var getGeocode = function(docId, address) {
+var getGeocode = function(docId, address, lat, long) {
   address = address.split(" ").join("+")
   var apiUrl = "https://api.mapbox.com/geocoding/v5/"
   var endpoint = "mapbox.places/"
@@ -35,7 +73,7 @@ var getGeocode = function(docId, address) {
   var arguments = {
     headers: {"User-Agent": "Meteor/1.0"},
     params: {
-      "proximity": "-97.13,33.20",
+      "proximity": long+","+lat,
       "access_token":  Meteor.settings.MAPBOX_KEY,
     }
   }
