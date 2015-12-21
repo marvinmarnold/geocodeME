@@ -1,0 +1,14 @@
+<template name="uploadForm">
+  <p>
+    Upload a CSV with addresses in the first column.
+    This app will output a new CSV with the city in the second column and zip code in the third.
+    Give a reference point to make sure the cities are near that point.
+  </p>
+
+  <form id="uploadForm">
+    <input type="file" id="files" name="files[]" multiple />
+    <output id="list"></output>
+  </form>
+
+  <h2>Parsed {{numLinesParsed}} lines</h2>
+</template>
