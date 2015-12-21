@@ -16,9 +16,9 @@ Meteor.startup(function(){
 });
 
 Template.uploadForm.events({
-  "change #files": function (e) {
+  "change #files": function (event, template) {
 
-    var files = e.target.files || e.dataTransfer.files;
+    var files = event.target.files || event.dataTransfer.files;
     for (var i = 0, file; file = files[i]; i++) {
       var docId = Random.id()
       Session.set("docId", docId)
@@ -28,11 +28,10 @@ Template.uploadForm.events({
         reader.onloadend = function (e) {
           var text = e.target.result;
           var data = Papa.parse(text).data;
-          console.log($(this).find('[name=lat]').val());
-          // var lat = parseFloat($(this).find('[name=lat]').val())
-          // var long = parseFloat($(this).find('[name=long]').val())
-          var long = -97.13
-          var lat = 33.20
+          var lat = parseFloat(template.find('[name=lat]').value)
+          var long = parseFloat(template.find('[name=long]').value)
+          // var long = -97.13
+          // var lat = 33.20
           console.log(lat);
           _.each(data, function(row) {
             if(row[2]) {
