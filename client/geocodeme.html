@@ -16,8 +16,9 @@
     <input type="file" id="files" name="files[]" multiple />
     <output id="list"></output>
   </form>
-  <hr>
+
   {{#if parsingStarted}}
+    <hr>
     <h2>Parsed {{numLinesParsed}} lines</h2>
     <h2>When your document is ready, it will be available <a href="{{loc}}">HERE</a></h2>
   {{/if}}
