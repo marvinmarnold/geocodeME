@@ -95,7 +95,7 @@ var getGeocode = function(docId, address, lat, long, i, email) {
 
     // sometimes these process too fast.
     if(i === requestSizes[docId]) {
-      Match.setTimeout(function() {
+      Meteor.setTimeout(function() {
         if(i === requestSizes[docId]) {
           Email.send({
             to: email,
