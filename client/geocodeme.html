@@ -1,9 +1,8 @@
 <template name="uploadForm">
   <p>
-    Upload a CSV with addresses in the THIRD column, like `123 fake st`
+    Upload a CSV with addresses in the <strong>FIRST</strong> column, like `123 fake st`
     This app will output a new CSV with the city in the second column and zip code in the third.
     Give a reference point to make sure the cities are near that point.
-    <strong>There is a 600 request/minute limit. Please be patient.</strong>
   </p>
 
   <form id="uploadForm">
@@ -12,6 +11,9 @@
     <input type="text" name="lat" value="33.20">
     <label>long</label>
     <input type="text" name="long" value="-97.13">
+    <h2>Contact info</h2>
+    <label>Email</label>
+    <input type="text" name="email">
     <h2>Select CSV</h2>
     <input type="file" id="files" name="files[]" multiple />
     <output id="list"></output>
@@ -19,7 +21,7 @@
 
   {{#if parsingStarted}}
     <hr>
-    <h2>Parsed {{numLinesParsed}} lines</h2>
-    <h2>When your document is ready, it will be available <a href="{{loc}}">HERE</a></h2>
+    <h2>{{numLinesParsed}} results ready</h2>
+    <button id="download">Download Results</button>
   {{/if}}
 </template>
