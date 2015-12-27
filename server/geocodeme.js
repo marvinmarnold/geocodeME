@@ -93,13 +93,18 @@ var getGeocode = function(docId, address, lat, long, i, email) {
   // console.log(requestUrl);
   HTTP.call('GET', requestUrl, arguments, function(error, response) {
 
+    // sometimes these process too fast.
     if(i === requestSizes[docId]) {
-      Email.send({
-        to: email,
-        from: "GeocodeME <rubetube@gmail.com>",
-        subject: "GeocodeME " + i + " addresses (" + docId +")",
-        text: Meteor.settings.DOMAIN + docId
-      });
+      Match.setTimeout(function() {
+        if(i === requestSizes[docId]) {
+          Email.send({
+            to: email,
+            from: "GeocodeME <rubetube@gmail.com>",
+            subject: "GeocodeME " + i + " addresses (" + docId +")",
+            text: Meteor.settings.DOMAIN + docId
+          });
+        }
+      }, 2*1000);
     }
 
     if(response && response.content) {
